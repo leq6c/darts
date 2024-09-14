@@ -1685,22 +1685,7 @@ class TorchForecastingModel(GlobalForecastingModel, ABC):
 
         # save the TorchForecastingModel (does not save the PyTorch LightningModule, and Trainer)
         with open(path, "wb") as f_out:
-            # backup
-            tmp_training_series = self.training_series
-            tmp_past_covariate_series = self.past_covariate_series
-            tmp_future_covariate_series = self.future_covariate_series
-            tmp_static_covariates = self.static_covariates
-            self.training_series = None
-            self.past_covariate_series = None
-            self.future_covariate_series = None
-            self.static_covariates = None
-            # run save without dataset
-            torch.save(self, f_out)
-            # restore
-            self.training_series = tmp_training_series 
-            self.past_covariate_series = tmp_past_covariate_series 
-            self.future_covariate_series = tmp_future_covariate_series 
-            self.static_covariates = tmp_static_covariates 
+            torch.save(self, f_out, pickle_protocol=4)
 
         # save the LightningModule checkpoint
         path_ptl_ckpt = path + ".ckpt"
